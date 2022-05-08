@@ -75,7 +75,9 @@ describe("CHEF", function() {
         );
 
         for (const thisUser of[bob, carol, david, erin]) {
-            await mockCAKEContract.connect(thisUser).mintTokens(ethers.utils.parseEther("1000"));
+            await mockCAKEContract
+                .connect(thisUser)
+                .mintTokens(ethers.utils.parseEther("1000"));
 
             await mockCAKEContract
                 .connect(thisUser)
@@ -88,9 +90,12 @@ describe("CHEF", function() {
             currentBlockNumber = await ethers.provider.getBlockNumber();
             console.log(
                 `user pending rewards in block number ${currentBlockNumber} is :`,
-                (await ChefManagerContract.connect(thisUser).getUserPendingRewards(_poolID)).toString()
+                (
+                    await ChefManagerContract.connect(thisUser).getUserPendingRewards(
+                        _poolID
+                    )
+                ).toString()
             );
-
         }
 
         /// /////////////////////////////////////////////// CHECK USER PENDING REWARDS AFTER 1 BLOCK
@@ -103,7 +108,9 @@ describe("CHEF", function() {
         currentBlockNumber = await ethers.provider.getBlockNumber();
         console.log(
             `user pending rewards in block number ${currentBlockNumber} is :`,
-            (await ChefManagerContract.connect(erin).getUserPendingRewards(_poolID)).toString()
+            (
+                await ChefManagerContract.connect(erin).getUserPendingRewards(_poolID)
+            ).toString()
         );
 
         /// /////////////////////////////////////////////// USERS CAN WITHDRAW !
@@ -112,11 +119,7 @@ describe("CHEF", function() {
             ethers.provider.send("evm_mine");
         }
 
-
         for (const thisUser of[bob, carol, david, erin]) {
-
-
-
             await ChefManagerContract.connect(thisUser).withdraw(
                 ethers.utils.parseEther("1000"),
                 _poolID
@@ -125,14 +128,16 @@ describe("CHEF", function() {
             currentBlockNumber = await ethers.provider.getBlockNumber();
             console.log(
                 `user pending rewards in block number ${currentBlockNumber} is :`,
-                (await ChefManagerContract.connect(thisUser).getUserPendingRewards(_poolID)).toString()
+                (
+                    await ChefManagerContract.connect(thisUser).getUserPendingRewards(
+                        _poolID
+                    )
+                ).toString()
             );
             console.log(
                 `user rewards in block number ${currentBlockNumber} is :`,
                 (await DAITokenContract.balanceOf(thisUser.address)).toString()
             );
         }
-
-
     });
 });
